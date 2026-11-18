@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block titulo %}Ingresar{% endblock %}
+{% block contenido %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <span class="brand-mark login-brand mb-2">PV</span>
+      <h1 class="h2 mt-2 mb-1">Portal Vecinal</h1>
+      <p class="text-secondary mb-0">Solicita los documentos de tu junta de vecinos en línea</p>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="rut" class="form-label">RUT</label>
+            <input type="text" class="form-control form-control-lg" id="rut" name="rut"
+                   placeholder="12.345.678-5" autocomplete="username" required
+                   value="{{ request.POST.rut }}">
+          </div>
+          <div class="mb-4">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control form-control-lg" id="correo" name="correo"
+                   placeholder="tucorreo@ejemplo.cl" autocomplete="email" required
+                   value="{{ request.POST.correo }}">
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg w-100">Ingresar</button>
+        </form>
+        <p class="small text-secondary text-center mt-3 mb-0">
+          Al ingresar te asignamos automáticamente a tu junta de vecinos.
+        </p>
+      </div>
+    </div>
+
+    <div class="demo-box p-3 mt-3">
+      <div class="fw-semibold mb-1"><i class="bi bi-info-circle"></i> Cuentas de demostración</div>
+      {% for c in cuentas_demo %}
+        <div class="d-flex justify-content-between">
+          <span class="text-capitalize">{{ c.rol }}</span>
+          <code>{{ c.rut }} · {{ c.correo }}</code>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Formatea el RUT mientras se escribe (12345678K -> 12.345.678-K)
+  const rut = document.getElementById("rut");
+  rut.addEventListener("input", () => {
+    let v = rut.value.replace(/[^0-9kK]/g, "").toUpperCase();
+    if (v.length > 1) {
+      const cuerpo = v.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      v = cuerpo + "-" + v.slice(-1);
+    }
+    rut.value = v;
+  });
+</script>
+{% endblock %}

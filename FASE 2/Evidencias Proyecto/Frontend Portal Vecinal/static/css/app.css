@@ -1,0 +1,101 @@
+/* Portal Vecinal · paleta institucional (azul municipal + acento rojo) */
+:root {
+  --jv-primary: #1d3f72;
+  --jv-primary-dark: #142d54;
+  --jv-accent: #c10000;
+  --jv-warning: #e9a23b;
+  --jv-bg: #f2f5fa;
+  --jv-tint: #e9f0fb;
+  --bs-primary: var(--jv-primary);
+  --bs-primary-rgb: 29, 63, 114;
+  --bs-link-color: var(--jv-primary);
+  --bs-link-hover-color: var(--jv-primary-dark);
+  --bs-link-color-rgb: 29, 63, 114;
+  --bs-link-hover-color-rgb: 20, 45, 84;
+}
+
+/* Interfaz más grande: Bootstrap usa rem, así que esto escala todo. */
+html { font-size: 17.5px; }
+body { background: var(--jv-bg); }
+@media (min-width: 1400px) { .container { max-width: 1280px; } }
+
+/* Botones */
+.btn:not(.btn-sm):not(.btn-lg) { --bs-btn-padding-y: .55rem; --bs-btn-padding-x: 1.1rem; }
+.btn-primary {
+  --bs-btn-bg: var(--jv-primary);
+  --bs-btn-border-color: var(--jv-primary);
+  --bs-btn-hover-bg: var(--jv-primary-dark);
+  --bs-btn-hover-border-color: var(--jv-primary-dark);
+  --bs-btn-active-bg: var(--jv-primary-dark);
+  --bs-btn-active-border-color: var(--jv-primary-dark);
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--jv-primary);
+  --bs-btn-border-color: var(--jv-primary);
+  --bs-btn-hover-bg: var(--jv-primary);
+  --bs-btn-hover-border-color: var(--jv-primary);
+  --bs-btn-active-bg: var(--jv-primary-dark);
+}
+.nav-pills { --bs-nav-pills-link-active-bg: var(--jv-primary); }
+
+/* Barra superior */
+.navbar-jv {
+  background: var(--jv-primary);
+  border-bottom: 5px solid var(--jv-accent);
+  padding-top: 1.15rem;
+  padding-bottom: 1.15rem;
+  box-shadow: 0 2px 8px rgba(20, 45, 84, .25);
+}
+.navbar-jv .navbar-brand { font-size: 1.55rem; font-weight: 700; letter-spacing: .01em; }
+.navbar-jv .nav-link { color: rgba(255, 255, 255, .82); font-size: 1.05rem; padding: .65rem 1.1rem; border-radius: .5rem; }
+.navbar-jv .nav-link:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.navbar-jv .nav-link.active { color: #fff; background: rgba(255, 255, 255, .16); font-weight: 600; }
+.brand-mark {
+  display: inline-grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 10px;
+  background: var(--jv-accent); color: #fff; font-weight: 800; font-size: 1.1rem;
+  border: 2px solid rgba(255, 255, 255, .85);
+}
+
+/* Tarjetas y números */
+.card { border: 0; box-shadow: 0 1px 4px rgba(20, 45, 84, .1); }
+.card-header { font-size: 1.05rem; }
+.stat-number { font-size: 2.4rem; font-weight: 700; line-height: 1; color: var(--jv-primary); }
+.stat-label { color: #5d6b82; font-size: .9rem; }
+
+/* Estados (colores semánticos, no de marca) */
+.badge-estado { font-weight: 600; padding: .5em .8em; font-size: .85rem; }
+.estado-en_revision { background: #fff3d6; color: #8a5a00; }
+.estado-aprobada, .estado-listo { background: #d9f0e4; color: #17613b; }
+.estado-rechazada { background: #fbe0e0; color: #9a2424; }
+
+.cat-chip { font-size: .78rem; font-weight: 600; padding: .25em .65em; border-radius: 999px; background: var(--jv-tint); color: var(--jv-primary); }
+
+/* Línea de tiempo del seguimiento */
+.timeline { list-style: none; padding-left: 0; margin: 0; }
+.timeline li { position: relative; padding: 0 0 1.5rem 2.3rem; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline li::before { content: ""; position: absolute; left: .55rem; top: 1.3rem; bottom: -.1rem; width: 2px; background: #cfd8e6; }
+.timeline li:last-child::before { display: none; }
+.timeline .punto { position: absolute; left: 0; top: .15rem; width: 1.2rem; height: 1.2rem; border-radius: 50%; background: #fff; border: 2px solid #bcc7d9; }
+.timeline .hecho .punto { background: var(--jv-primary); border-color: var(--jv-primary); }
+.timeline .actual .punto { background: var(--jv-warning); border-color: var(--jv-warning); box-shadow: 0 0 0 4px rgba(233, 162, 59, .25); }
+.timeline .error .punto { background: #c0392b; border-color: #c0392b; }
+.timeline .pendiente { color: #8591a6; }
+.timeline .paso-detalle { font-size: .88rem; color: #5d6b82; }
+
+.notif-nueva { background: var(--jv-tint); }
+
+/* Opciones seleccionables (tipo de solicitud, documento) */
+.doc-option { cursor: pointer; transition: border-color .15s, background .15s; border: 2px solid transparent; }
+.doc-option:hover { background: var(--jv-tint); }
+.btn-check:checked + .doc-option { border-color: var(--jv-primary); background: var(--jv-tint); }
+
+/* Login */
+.login-wrap { min-height: calc(100vh - 3rem); display: grid; place-items: center; }
+.login-card { max-width: 480px; width: 100%; }
+.login-brand { width: 64px; height: 64px; font-size: 1.5rem; border-radius: 14px; }
+.demo-box { background: #fff; border: 1px dashed var(--jv-primary); border-radius: .5rem; font-size: .85rem; }
+
+.table > :not(caption) > * > * { padding-top: .9rem; padding-bottom: .9rem; }
+.breadcrumb { font-size: .95rem; }

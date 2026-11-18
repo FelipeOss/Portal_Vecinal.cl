@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block titulo %}Usuarios{% endblock %}
+{% block contenido %}
+<h1 class="h3 mb-3">Usuarios</h1>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead class="table-light"><tr><th>Nombre</th><th>RUT</th><th>Correo</th><th>Rol</th><th>Junta asignada</th></tr></thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td class="fw-semibold">{{ u.nombre }}</td>
+          <td>{{ u.rut }}</td>
+          <td class="text-secondary">{{ u.correo }}</td>
+          <td>
+            <span class="badge {% if u.rol == 'administrador' %}text-bg-dark{% elif u.rol == 'presidente' %}text-bg-warning{% else %}text-bg-secondary{% endif %} text-capitalize">{{ u.rol }}</span>
+          </td>
+          <td>{% if u.junta %}{{ u.junta.nombre }}{% else %}<span class="text-secondary">—</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

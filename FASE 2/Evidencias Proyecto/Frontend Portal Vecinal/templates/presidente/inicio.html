@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block titulo %}Resumen{% endblock %}
+{% block contenido %}
+<div class="mb-4">
+  <h1 class="h3 mb-0">{{ junta.nombre }}</h1>
+  <p class="text-secondary mb-0">{{ junta.sector }} · Panel del presidente</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="stat-number">{{ n_por_revisar }}</div><div class="stat-label">Espacios por revisar</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="stat-number">{{ n_aprobadas }}</div><div class="stat-label">Aprobadas</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="stat-number">{{ n_rechazadas }}</div><div class="stat-label">Rechazadas</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card"><div class="card-body"><div class="stat-number">{{ n_vecinos }}</div><div class="stat-label">Vecinos en la junta</div></div></div></div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">Solicitudes de espacio común por revisar</span>
+    <a href="{% url 'presidente_solicitudes' %}" class="small">Gestionar todas</a>
+  </div>
+  <ul class="list-group list-group-flush">
+    {% for s in por_revisar %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <div class="fw-semibold">{{ s.tipo }} · {{ s.uso.fecha }} · {{ s.uso.horario }}</div>
+        <div class="small text-secondary">{{ s.vecino }} · {{ s.uso.personas }} personas · {{ s.codigo }}</div>
+      </div>
+      <a href="{% url 'presidente_solicitudes' %}" class="btn btn-sm btn-primary">Revisar</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item text-center text-secondary py-4">No hay solicitudes por revisar.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="alert alert-light border small mb-0">
+  <i class="bi bi-file-earmark-check"></i>
+  Los documentos de los vecinos (<strong>{{ n_documentos }}</strong> emitidos) los genera el sistema automáticamente; no requieren tu revisión.
+</div>
+{% endblock %}

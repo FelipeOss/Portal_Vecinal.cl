@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block titulo %}Nueva solicitud{% endblock %}
+{% block contenido %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h1 class="h3 mb-1">Nueva solicitud</h1>
+    <p class="text-secondary mb-4">
+      Tu solicitud queda registrada con un código de seguimiento para que puedas ver en qué estado va.
+    </p>
+
+    <form method="post" id="formSolicitud">
+      {% csrf_token %}
+
+      <!-- Paso 1: ¿Documento o espacio común? -->
+      <label class="form-label fw-semibold">1. ¿Qué necesitas?</label>
+      <div class="row g-2 mb-4">
+        <div class="col-sm-6">
+          <input type="radio" class="btn-check" name="categoria" id="cat-documento" value="documento" {% if cat_inicial == "documento" %}checked{% endif %} required>
+          <label class="card doc-option h-100" for="cat-documento">
+            <div class="card-body">
+              <i class="bi bi-file-earmark-text fs-3 text-primary"></i>
+              <div class="fw-semibold">Un documento</div>
+              <div class="small text-secondary">Se genera automáticamente y llega a tu correo en PDF.</div>
+            </div>
+          </label>
+        </div>
+        <div class="col-sm-6">
+          <input type="radio" class="btn-check" name="categoria" id="cat-espacio" value="espacio_comun" {% if cat_inicial == "espacio_comun" %}checked{% endif %}>
+          <label class="card doc-option h-100" for="cat-espacio">
+            <div class="card-body">
+              <i class="bi bi-building fs-3 text-primary"></i>
+              <div class="fw-semibold">Un espacio común</div>
+              <div class="small text-secondary">Debe ser revisado y aprobado por el presidente de tu junta.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div id="detalle" class="d-none">
+
+        <!-- Paso 2A: documento -->
+        <div id="seccion-documento" class="mb-4">
+          <label class="form-label fw-semibold">2. Elige el documento</label>
+          <div class="d-grid gap-2">
+            {% for t in tipos %}
+            <div>
+              <input type="radio" class="btn-check" name="tipo" id="tipo-{{ t.codigo }}" value="{{ t.codigo }}" required>
+              <label class="card doc-option w-100" for="tipo-{{ t.codigo }}">
+                <div class="card-body d-flex gap-3 align-items-start">
+                  <i class="bi bi-file-earmark-text fs-3 text-primary"></i>
+                  <div>
+                    <div class="fw-semibold">{{ t.nombre }}</div>
+                    <div class="small text-secondary">{{ t.descripcion }}</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Paso 2B: espacio común -->
+        <div id="seccion-espacio_comun" class="mb-4">
+          <label class="form-label fw-semibold">2. Datos de la reserva</label>
+          <div class="card">
+            <div class="card-body row g-3">
+              <div class="col-12">
+                <label for="espacio" class="form-label">Espacio</label>
+                <select class="form-select" id="espacio" name="espacio" required>
+                  <option value="" selected disabled>Selecciona un espacio…</option>
+                  {% for e in espacios %}
+                  <option value="{{ e.codigo }}">{{ e.nombre }} (hasta {{ e.capacidad }} personas)</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label for="fecha_uso" class="form-label">Fecha de uso</label>
+                <input type="date" class="form-control" id="fecha_uso" name="fecha_uso" required>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="hora_inicio" class="form-label">Desde</label>
+                <input type="time" class="form-control" id="hora_inicio" name="hora_inicio" required>
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="hora_fin" class="form-label">Hasta</label>
+                <input type="time" class="form-control" id="hora_fin" name="hora_fin" required>
+              </div>
+              <div class="col-md-2">
+                <label for="personas" class="form-label">Personas</label>
+                <input type="number" class="form-control" id="personas" name="personas" min="1" required>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="motivo" class="form-label fw-semibold">3. Motivo <span class="fw-normal text-secondary">(opcional)</span></label>
+          <input type="text" class="form-control" id="motivo" name="motivo" maxlength="120"
+                 placeholder="Ej: trámite bancario, cumpleaños, campeonato de barrio…">
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body small">
+            <div class="fw-semibold mb-2">Datos del solicitante</div>
+            <div class="row">
+              <div class="col-sm-6"><span class="text-secondary">Nombre:</span> {{ usuario.nombre }}</div>
+              <div class="col-sm-6"><span class="text-secondary">RUT:</span> {{ usuario.rut }}</div>
+              <div class="col-sm-6"><span class="text-secondary">Junta de vecinos:</span> {{ junta.nombre }}</div>
+              <div class="col-sm-6"><span class="text-secondary">Sector:</span> {{ junta.sector }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info small" id="aviso-documento">
+          <i class="bi bi-lightning-charge"></i> El documento se genera automáticamente. Recibirás una notificación y el PDF en <strong>{{ usuario.correo }}</strong>.
+        </div>
+        <div class="alert alert-info small" id="aviso-espacio_comun">
+          <i class="bi bi-person-check"></i> Esta solicitud la revisa el presidente de tu junta. Te notificaremos si la aprueba o la rechaza.
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary" id="btnEnviar"><i class="bi bi-send"></i> <span>Enviar solicitud</span></button>
+          <a href="{% url 'vecino_inicio' %}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const detalle = document.getElementById("detalle");
+  const secciones = {
+    documento: document.getElementById("seccion-documento"),
+    espacio_comun: document.getElementById("seccion-espacio_comun"),
+  };
+  const avisos = {
+    documento: document.getElementById("aviso-documento"),
+    espacio_comun: document.getElementById("aviso-espacio_comun"),
+  };
+  const textoBoton = {
+    documento: "Generar mi documento",
+    espacio_comun: "Enviar al presidente",
+  };
+
+  function mostrar(cat) {
+    detalle.classList.toggle("d-none", !cat);
+    for (const k of Object.keys(secciones)) {
+      const activa = k === cat;
+      secciones[k].classList.toggle("d-none", !activa);
+      avisos[k].classList.toggle("d-none", !activa);
+      // Los campos de la sección oculta se desactivan: no se validan ni se envían.
+      secciones[k].querySelectorAll("input, select").forEach((el) => (el.disabled = !activa));
+    }
+    if (cat) document.querySelector("#btnEnviar span").textContent = textoBoton[cat];
+  }
+
+  document.querySelectorAll('input[name="categoria"]').forEach((r) =>
+    r.addEventListener("change", () => mostrar(r.value))
+  );
+  const marcado = document.querySelector('input[name="categoria"]:checked');
+  mostrar(marcado ? marcado.value : null);
+</script>
+{% endblock %}
