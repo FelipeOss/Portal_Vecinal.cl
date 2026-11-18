@@ -33,16 +33,6 @@ Toda solicitud queda registrada y genera un código de seguimiento.
 | Documento | El sistema: actualiza el seguimiento, prepara el PDF con la firma digital del presidente y lo envía | Notificación al vecino y PDF en su correo, descargable desde el portal |
 | Espacio común | El presidente de la junta revisa y aprueba o rechaza | Notificación al vecino con la decisión y un comentario opcional |
 
-## Objetivos
-
-Desarrollar una aplicación web multiservicios (MVP) que permita a los vecinos registrarse, ser asignados automáticamente a su junta de vecinos y realizar solicitudes online, facilitando la gestión interna y la interconexión de datos municipales.
-
-- Plataforma web adaptable y accesible (Bootstrap / HTML5) para tres roles: administrador municipal, presidente de la junta y vecino.
-- Base de datos relacional en PostgreSQL para usuarios, hogares, juntas de vecinos y solicitudes.
-- Backend en Python/Django que procesa las solicitudes, asigna la junta según el domicilio y genera los PDF firmados.
-- Notificaciones automáticas por correo electrónico con el documento adjunto.
-- Plan de pruebas funcionales de usabilidad, seguridad e integridad.
-
 ## Tecnologías utilizadas
 
 | Capa | Tecnología |
@@ -108,8 +98,8 @@ Si solo quieres ver la interfaz, no necesitas base de datos ni variables de ento
 
 | Integrante | Rol |
 |------------|-----|
-| Felipe | Desarrollo front end |
-| _(nombre del compañero/a)_ | _(rol, por ejemplo: backend y base de datos)_ |
+| Felipe Guajardo | Desarrollo Frontend / Diseño UI-UX |
+| Miguel Montero | Desarrollo Backend y Base de Datos |
 
 Estudiantes de Ingeniería Informática, Duoc UC.
 
@@ -155,7 +145,3 @@ portal/mock_data.py  Datos de ejemplo para el modo demostración
 templates/           Plantillas por rol, con base.html compartido
 static/css/app.css   Estilos del portal sobre Bootstrap
 ```
-
-## Proyección
-
-El MVP se opera en servidor local. Como siguientes pasos se proyecta la firma electrónica avanzada, el despliegue en la nube con microservicios y la ampliación del módulo de espacios comunes con reservas más complejas, para escalar la solución a más municipios.
