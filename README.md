@@ -135,13 +135,3 @@ flowchart LR
 ### Modelo de datos
 
 Tablas principales: `USUARIO`, `HOGAR`, `JUNTA_VECINAL`, `SOLICITUD`, `TIPO_DOCUMENTO` y `DOCUMENTO`, relacionadas mediante llaves primarias y foráneas. El domicilio del hogar determina la junta de vecinos asignada al usuario.
-
-### Estructura del repositorio
-
-```
-config/              Configuración de Django
-portal/views.py      Vistas, con control de acceso por rol
-portal/mock_data.py  Datos de ejemplo para el modo demostración
-templates/           Plantillas por rol, con base.html compartido
-static/css/app.css   Estilos del portal sobre Bootstrap
-```
