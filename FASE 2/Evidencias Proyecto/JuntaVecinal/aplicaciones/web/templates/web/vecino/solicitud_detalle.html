@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block titulo %}Seguimiento {{ s.codigo }}{% endblock %}
+{% block contenido %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'vecino_solicitudes' %}">Mis solicitudes</a></li>
+    <li class="breadcrumb-item active">{{ s.codigo }}</li>
+  </ol>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-between align-items-start mb-4 gap-2">
+  <div>
+    <span class="cat-chip">{% if s.categoria == "documento" %}Documento{% else %}Espacio común{% endif %}</span>
+    <h1 class="h3 mt-2 mb-0">{{ s.tipo }}</h1>
+    <div class="text-secondary">Código de seguimiento <strong>{{ s.codigo }}</strong> · solicitado el {{ s.fecha }}</div>
+  </div>
+  <div class="fs-6">{% include "_estado.html" with estado=s.estado %}</div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card h-100">
+      <div class="card-header bg-white fw-semibold">Estado de seguimiento</div>
+      <div class="card-body">
+        <ol class="timeline">
+          {% for p in pasos %}
+          <li class="{{ p.estado }}">
+            <span class="punto"></span>
+            <div class="fw-semibold">{{ p.texto }}</div>
+            {% if p.detalle %}<div class="paso-detalle">{{ p.detalle }}</div>{% endif %}
+          </li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card mb-3">
+      <div class="card-header bg-white fw-semibold">Detalle</div>
+      <div class="card-body">
+        <dl class="row mb-0 small">
+          <dt class="col-5">Solicitante</dt><dd class="col-7">{{ s.vecino }}</dd>
+          <dt class="col-5">Junta</dt><dd class="col-7">{{ junta.nombre }}</dd>
+          {% if s.motivo %}<dt class="col-5">Motivo</dt><dd class="col-7">{{ s.motivo }}</dd>{% endif %}
+          {% if s.uso %}
+            <dt class="col-5">Fecha de uso</dt><dd class="col-7">{{ s.uso.fecha }}</dd>
+            <dt class="col-5">Horario</dt><dd class="col-7">{{ s.uso.horario }}</dd>
+            <dt class="col-5">Personas</dt><dd class="col-7">{{ s.uso.personas }}</dd>
+          {% endif %}
+        </dl>
+      </div>
+    </div>
+
+    {% if s.estado == "listo" %}
+    <div class="card border-success">
+      <div class="card-body">
+        <div class="fw-semibold mb-1"><i class="bi bi-file-earmark-check text-success"></i> Tu documento está listo</div>
+        <p class="small text-secondary">Lo enviamos a {{ usuario.correo }}. También puedes descargarlo aquí.</p>
+        <a href="?descargar=1" class="btn btn-primary"><i class="bi bi-download"></i> Descargar PDF</a>
+      </div>
+    </div>
+    {% elif s.estado == "en_revision" %}
+    <div class="alert alert-warning small mb-0">
+      <i class="bi bi-hourglass-split"></i> El presidente de tu junta está revisando la solicitud. Te enviaremos una notificación con su decisión.
+    </div>
+    {% elif s.estado == "aprobada" %}
+    <div class="alert alert-success small mb-0">
+      <i class="bi bi-check-circle"></i> Solicitud aprobada. El espacio queda reservado para la fecha indicada.
+    </div>
+    {% else %}
+    <div class="alert alert-danger small mb-0">
+      <i class="bi bi-x-circle"></i> Solicitud rechazada.{% if s.comentario %} Motivo: {{ s.comentario }}{% endif %}
+      <div class="mt-2"><a href="{% url 'vecino_solicitar' %}?cat=espacio_comun" class="alert-link">Hacer una nueva solicitud</a></div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

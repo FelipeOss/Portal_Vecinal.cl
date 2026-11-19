@@ -1,0 +1,184 @@
+:root {
+  --jv-primary: #0f5132;
+  --jv-primary-dark: #0a3a24;
+  --jv-accent: #f2c14e;
+  --jv-soft: #eef5f1;
+}
+
+body {
+  background-color: #f6f8f7;
+  color: #212529;
+}
+
+.navbar-jv {
+  background: linear-gradient(135deg, var(--jv-primary), var(--jv-primary-dark));
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: var(--jv-accent);
+  color: var(--jv-primary-dark);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(160deg, var(--jv-soft), #ffffff 60%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.login-brand {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.1rem;
+  border-radius: 0.75rem;
+}
+
+.demo-box {
+  background-color: #fff;
+  border: 1px dashed #ced4da;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.doc-option {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  border: 1px solid #dee2e6;
+}
+
+.doc-option:hover {
+  border-color: var(--jv-primary);
+  box-shadow: 0 4px 14px rgba(15, 81, 50, 0.12);
+}
+
+.btn-check:checked + .doc-option {
+  border-color: var(--jv-primary);
+  box-shadow: 0 0 0 0.2rem rgba(15, 81, 50, 0.18);
+  background-color: var(--jv-soft);
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--jv-primary);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+}
+
+.cat-chip {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background-color: var(--jv-soft);
+  color: var(--jv-primary-dark);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.notif-nueva {
+  background-color: #fff8e1;
+  border-left: 3px solid var(--jv-accent);
+}
+
+.badge-estado {
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+}
+
+.estado-en_revision {
+  background-color: #fff3cd;
+  color: #664d03;
+}
+
+.estado-aprobada {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.estado-listo {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.estado-rechazada {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.timeline li {
+  position: relative;
+  padding: 0 0 1.25rem 1.75rem;
+}
+
+.timeline li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 0.4rem;
+  top: 1rem;
+  bottom: 0;
+  width: 2px;
+  background-color: #dee2e6;
+}
+
+.timeline .punto {
+  position: absolute;
+  left: 0;
+  top: 0.3rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background-color: #adb5bd;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #adb5bd;
+}
+
+.timeline li.hecho .punto,
+.timeline li.activo .punto {
+  background-color: var(--jv-primary);
+  box-shadow: 0 0 0 1px var(--jv-primary);
+}
+
+.timeline li.activo .punto {
+  background-color: var(--jv-accent);
+  box-shadow: 0 0 0 1px var(--jv-accent);
+}
+
+.paso-detalle {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 0.15rem;
+}

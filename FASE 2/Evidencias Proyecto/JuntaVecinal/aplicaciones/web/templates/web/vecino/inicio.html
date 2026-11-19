@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+<div class="mb-4">
+  <h1 class="h3 mb-0">Hola, {{ usuario.nombre|truncatewords:1 }}</h1>
+  <p class="text-secondary mb-0">Perteneces a <strong>{{ junta.nombre }}</strong> · {{ junta.sector }}</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-12">
+    <a href="{% url 'vecino_solicitar' %}?cat=documento" class="card h-100 text-decoration-none text-reset doc-option">
+      <div class="card-body d-flex gap-3 align-items-start">
+        <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
+        <div>
+          <div class="fw-semibold fs-5">Solicitar un documento</div>
+          <div class="text-secondary small">Certificado de residencia. Se genera al instante y llega a tu correo en PDF.</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-4"><div class="card"><div class="card-body"><div class="stat-number">{{ total }}</div><div class="stat-label">Solicitudes</div></div></div></div>
+  <div class="col-4"><div class="card"><div class="card-body"><div class="stat-number">{{ en_revision }}</div><div class="stat-label">En revisión</div></div></div></div>
+  <div class="col-4"><div class="card"><div class="card-body"><div class="stat-number">{{ documentos }}</div><div class="stat-label">Documentos recibidos</div></div></div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card h-100">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">Últimas solicitudes</span>
+        <a href="{% url 'vecino_solicitudes' %}" class="small">Ver todas</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light"><tr><th>Seguimiento</th><th>Solicitud</th><th>Estado</th></tr></thead>
+          <tbody>
+            {% for s in recientes %}
+            <tr>
+              <td><a href="{% url 'vecino_solicitud_detalle' s.id %}">{{ s.codigo }}</a><div class="small text-secondary">{{ s.fecha }}</div></td>
+              <td>{{ s.tipo }}<div><span class="cat-chip">{% if s.categoria == "documento" %}Documento{% else %}Espacio común{% endif %}</span></div></td>
+              <td>{% include "_estado.html" with estado=s.estado %}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-secondary py-4">Aún no tienes solicitudes.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <span class="fw-semibold"><i class="bi bi-bell"></i> Notificaciones</span>
+        <a href="{% url 'vecino_notificaciones' %}" class="small">Ver todas</a>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for n in notificaciones %}
+        <li class="list-group-item {% if not n.leida %}notif-nueva{% endif %}">
+          <div class="small">{{ n.texto }}</div>
+          <a class="small" href="{% url 'vecino_solicitud_detalle' n.solicitud.id %}">{{ n.enlace }}</a>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-center text-secondary py-4">Sin notificaciones.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

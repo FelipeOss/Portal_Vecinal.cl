@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block titulo %}Juntas de vecinos{% endblock %}
+{% block contenido %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Juntas de vecinos</h1>
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalJunta"><i class="bi bi-plus-lg"></i> Nueva junta</button>
+</div>
+
+<div class="row g-3">
+  {% for j in juntas %}
+  <div class="col-md-6 col-xl-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <h2 class="h5">{{ j.nombre }}</h2>
+          <span class="badge text-bg-light">{{ j.sector }}</span>
+        </div>
+        <div class="text-secondary small mb-3">{{ j.vecinos }} vecinos registrados</div>
+        <div class="small text-secondary">Presidente</div>
+        <div class="{% if j.presidente == 'Sin asignar' %}text-danger{% else %}fw-semibold{% endif %}">{{ j.presidente }}</div>
+      </div>
+      <div class="card-footer bg-white border-0 pt-0">
+        <button class="btn btn-sm btn-outline-primary">Editar</button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="modal fade" id="modalJunta" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" onsubmit="return false">
+      <div class="modal-header">
+        <h5 class="modal-title">Nueva junta de vecinos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3"><label class="form-label">Nombre</label><input class="form-control" placeholder="JV Villa Esperanza"></div>
+        <div class="mb-3"><label class="form-label">Sector</label><input class="form-control" placeholder="Sector Oriente"></div>
+        <div class="mb-3"><label class="form-label">Presidente (RUT)</label><input class="form-control" placeholder="12.345.678-5"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

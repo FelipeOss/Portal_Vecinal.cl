@@ -1,0 +1,4 @@
+{% if estado == "en_revision" %}<span class="badge badge-estado estado-en_revision"><i class="bi bi-hourglass-split"></i> En revisión</span>
+{% elif estado == "aprobada" %}<span class="badge badge-estado estado-aprobada"><i class="bi bi-check-circle"></i> Aprobada</span>
+{% elif estado == "listo" %}<span class="badge badge-estado estado-listo"><i class="bi bi-file-earmark-check"></i> Documento listo</span>
+{% else %}<span class="badge badge-estado estado-rechazada"><i class="bi bi-x-circle"></i> Rechazada</span>{% endif %}

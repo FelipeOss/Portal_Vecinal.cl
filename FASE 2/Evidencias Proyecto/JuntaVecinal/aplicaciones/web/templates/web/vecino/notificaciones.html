@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block titulo %}Notificaciones{% endblock %}
+{% block contenido %}
+<h1 class="h3 mb-3">Notificaciones</h1>
+
+<div class="card">
+  <ul class="list-group list-group-flush">
+    {% for n in notificaciones %}
+    <li class="list-group-item d-flex gap-3 align-items-start {% if not n.leida %}notif-nueva{% endif %}">
+      <i class="bi {% if n.solicitud.estado == 'pendiente' %}bi-hourglass-split text-warning{% elif n.solicitud.estado == 'rechazada' %}bi-x-circle text-danger{% else %}bi-file-earmark-check text-success{% endif %} fs-4"></i>
+      <div class="flex-grow-1">
+        <div>{{ n.texto }}{% if not n.leida %} <span class="badge text-bg-warning">Nueva</span>{% endif %}</div>
+        <div class="small text-secondary">{{ n.fecha }} · {{ n.solicitud.codigo }}</div>
+      </div>
+      <a href="{% url 'vecino_solicitud_detalle' n.solicitud.id %}" class="btn btn-sm btn-outline-primary">{{ n.enlace }}</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item text-center text-secondary py-5">No tienes notificaciones.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

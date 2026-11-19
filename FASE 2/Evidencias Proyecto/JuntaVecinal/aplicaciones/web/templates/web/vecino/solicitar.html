@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block titulo %}Nueva solicitud{% endblock %}
+{% block contenido %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h1 class="h3 mb-1">Nueva solicitud</h1>
+    <p class="text-secondary mb-4">
+      Tu solicitud queda registrada con un código de seguimiento y el certificado se descarga automáticamente.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <label class="form-label fw-semibold">1. Elige el documento</label>
+      <div class="d-grid gap-2 mb-4">
+        {% for t in tipos %}
+        <div>
+          {% if t.disponible %}
+          <input type="radio" class="btn-check" name="tipo" id="tipo-{{ t.codigo }}" value="{{ t.codigo }}" required>
+          {% else %}
+          <input type="radio" class="btn-check" name="tipo" id="tipo-{{ t.codigo }}" value="{{ t.codigo }}" disabled>
+          {% endif %}
+          <label class="card doc-option w-100 {% if not t.disponible %}opacity-50{% endif %}" for="tipo-{{ t.codigo }}">
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="bi bi-file-earmark-text fs-3 text-primary"></i>
+              <div>
+                <div class="fw-semibold">{{ t.nombre }}
+                  {% if not t.disponible %}<span class="badge text-bg-secondary ms-2">Próximamente</span>{% endif %}
+                </div>
+                {% if t.descripcion %}<div class="small text-secondary">{{ t.descripcion }}</div>{% endif %}
+              </div>
+            </div>
+          </label>
+        </div>
+        {% empty %}
+        <div class="alert alert-warning mb-0">No hay tipos de documento habilitados.</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-4">
+        <label for="motivo" class="form-label fw-semibold">2. Motivo <span class="fw-normal text-secondary">(obligatorio)</span></label>
+        <input type="text" class="form-control" id="motivo" name="motivo" maxlength="120" required
+               placeholder="Ej: trámite bancario, postulación, pensión…"
+               value="{{ request.POST.motivo }}">
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body small">
+          <div class="fw-semibold mb-2">Datos del solicitante</div>
+          <div class="row">
+            <div class="col-sm-6"><span class="text-secondary">Nombre:</span> {{ usuario.nombre }}</div>
+            <div class="col-sm-6"><span class="text-secondary">RUT:</span> {{ usuario.rut }}</div>
+            <div class="col-sm-6"><span class="text-secondary">Junta de vecinos:</span> {{ junta.nombre }}</div>
+            <div class="col-sm-6"><span class="text-secondary">Dirección:</span> {{ usuario.hogar.direccion }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info small">
+        <i class="bi bi-lightning-charge"></i> El certificado se genera automáticamente con tus datos y se descarga al enviar.
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i> Generar mi documento</button>
+        <a href="{% url 'vecino_inicio' %}" class="btn btn-outline-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block titulo %}Ingresar{% endblock %}
+{% block contenido %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <span class="brand-mark login-brand mb-2">PV</span>
+      <h1 class="h2 mt-2 mb-1">Portal Vecinal</h1>
+      <p class="text-secondary mb-0">Solicita los documentos de tu junta de vecinos en línea</p>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control form-control-lg" id="correo" name="correo"
+                   placeholder="tucorreo@ejemplo.cl" autocomplete="email" required
+                   value="{{ request.POST.correo }}">
+          </div>
+          <div class="mb-4">
+            <label for="clave" class="form-label">Contraseña</label>
+            <input type="password" class="form-control form-control-lg" id="clave" name="clave"
+                   placeholder="••••••••" autocomplete="current-password" required>
+            <div class="form-text">Vecinos: usen su RUT sin puntos ni guion como contraseña.</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg w-100">Ingresar</button>
+        </form>
+        <p class="small text-secondary text-center mt-3 mb-0">
+          Al ingresar te asignamos automáticamente a tu junta de vecinos.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

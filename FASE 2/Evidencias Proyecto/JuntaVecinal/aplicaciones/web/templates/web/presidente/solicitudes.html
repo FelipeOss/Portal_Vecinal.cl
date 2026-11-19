@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block titulo %}Solicitudes{% endblock %}
+{% block contenido %}
+<h1 class="h3 mb-1">Solicitudes de la junta</h1>
+<p class="text-secondary mb-3">Revisa las solicitudes de certificados que requieren tu aprobación.</p>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead class="table-light"><tr><th>Seguimiento</th><th>Vecino</th><th>Solicitud</th><th>Estado</th><th class="text-end">Acción</th></tr></thead>
+      <tbody>
+        {% for s in solicitudes %}
+        <tr>
+          <td class="fw-semibold">{{ s.codigo }}<div class="small text-secondary fw-normal">{{ s.fecha }}</div></td>
+          <td>{{ s.vecino }}<div class="small text-secondary">{{ s.rut }}</div></td>
+          <td>{{ s.tipo }}<div class="small text-secondary">{{ s.motivo|truncatechars:60 }}</div></td>
+          <td>{% include "_estado.html" with estado=s.estado %}</td>
+          <td class="text-end">
+            {% if s.estado == "en_revision" %}
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalRevision"
+                    data-codigo="{{ s.codigo }}" data-vecino="{{ s.vecino }}"
+                    data-rut="{{ s.rut }}" data-tipo="{{ s.tipo }}" data-fecha="{{ s.fecha }}"
+                    data-motivo="{{ s.motivo }}" data-url="{% url 'presidente_resolver' s.id %}">
+              <i class="bi bi-eye"></i> Revisar
+            </button>
+            {% else %}
+            <span class="text-secondary small">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-secondary py-4">No hay solicitudes por revisar.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="modalRevision" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form method="post" class="modal-content" id="formRevision">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Revisar solicitud <span id="rev-codigo"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <dl class="row mb-3">
+          <dt class="col-4">Solicitud</dt><dd class="col-8" id="rev-tipo"></dd>
+          <dt class="col-4">Fecha</dt><dd class="col-8" id="rev-fecha"></dd>
+          <dt class="col-4">Vecino</dt><dd class="col-8"><span id="rev-vecino"></span> <span class="text-secondary" id="rev-rut"></span></dd>
+          <dt class="col-4">Motivo</dt><dd class="col-8" id="rev-motivo"></dd>
+        </dl>
+        <label for="comentario" class="form-label">Comentario para el vecino <span class="text-secondary">(opcional)</span></label>
+        <textarea class="form-control" id="comentario" name="comentario" rows="2" placeholder="Ej: falta acreditar domicilio."></textarea>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="submit" name="accion" value="rechazar" class="btn btn-outline-danger"><i class="bi bi-x-circle"></i> Rechazar</button>
+        <button type="submit" name="accion" value="aprobar" class="btn btn-primary"><i class="bi bi-check-circle"></i> Aprobar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById("modalRevision").addEventListener("show.bs.modal", (e) => {
+    const d = e.relatedTarget.dataset;
+    document.getElementById("formRevision").action = d.url;
+    document.getElementById("rev-codigo").textContent = d.codigo;
+    document.getElementById("rev-tipo").textContent = d.tipo;
+    document.getElementById("rev-fecha").textContent = d.fecha;
+    document.getElementById("rev-vecino").textContent = d.vecino;
+    document.getElementById("rev-rut").textContent = "· " + d.rut;
+    document.getElementById("rev-motivo").textContent = d.motivo || "—";
+    document.getElementById("comentario").value = "";
+  });
+</script>
+{% endblock %}
